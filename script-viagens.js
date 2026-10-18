@@ -328,7 +328,7 @@ function updateSummary() {
 
     summaryContent.innerHTML = `
         <p><strong>Distância Total:</strong> ${totalMiles} milhas</p>
-        <p><strong>Dias de Viagem (In-Game):</strong> ${totalDaysInGame} dia(s)</p>
+        <p><strong>Dias de Viagem:</strong> ${totalDaysInGame} dia(s)</p>
         <p><strong>Custo Final (Grupo):</strong> <span class="cost-highlight">${finalFormattedCost}</span></p>
     `;
 
