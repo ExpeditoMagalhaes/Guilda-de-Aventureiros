@@ -442,8 +442,20 @@ if(mapContainer) {
             const scaleChange = currentDistance / initialPinchDistance;
             let newScale = lastScale * scaleChange;
             
-            // Trava o limite do zoom entre 0.1x e 5x
-            mapScale = Math.min(Math.max(0.1, newScale), 5);
+            // Trava o limite do zoom
+            newScale = Math.min(Math.max(0.1, newScale), 5);
+
+            // Descobre o ponto central exato entre os dois dedos
+            const rect = mapContainer.getBoundingClientRect();
+            const pinchX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+            const pinchY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+
+            // Compensa a posição para o zoom acontecer no meio da pinça (igual ao mouse)
+            const ratio = 1 - (newScale / mapScale);
+            translateX += (pinchX - translateX) * ratio;
+            translateY += (pinchY - translateY) * ratio;
+
+            mapScale = newScale;
             updateMapTransform();
         }
     }, { passive: false });
