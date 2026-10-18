@@ -4,60 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dito's Party</title>
-    <style>
-        body {
-            font-family: 'Georgia', serif;
-            background-color: #1a120c;
-            color: #f4ecd8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .hub-container {
-            background-color: #2c1e16;
-            padding: 40px;
-            border-radius: 8px;
-            border: 2px solid #8b5a2b;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            max-width: 400px;
-        }
-        h1 {
-            color: #d4af37;
-            margin-bottom: 10px;
-        }
-        p {
-            color: #aaa;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-        .tool-link {
-            display: inline-block;
-            background-color: #8b5a2b;
-            color: #f4ecd8;
-            text-decoration: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .tool-link:hover {
-            background-color: #6b4423;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="hub-container">
-        <h1>Guilda de Aventureiros</h1>
-        <p>Selecione a ferramenta desejada.</p>
-        
-        <!-- Link apontando para o seu arquivo renomeado -->
-        <a href="viagens.html" class="tool-link">🗺️ Calculadora de Rotas</a>
+<body class="page-index">
+    
+    <!-- BANNER AGORA FICA AQUI EM CIMA, FORA DA GRELHA -->
+    <div class="banner-full-top">
+        <img src="img/banner-principal.png" alt="Banner Oficial Dito's Party">
+    </div>
+
+    <!-- Grelha Principal (Max 1200px e Centralizada) -->
+    <div class="hub-wrapper">
+
+        <!-- Cabeçalho Ocupa as 3 Colunas -->
+        <div class="grid-span-3 header-container">
+            <h1>Guilda de Aventureiros</h1>
+            <p class="subtitle">Selecione a ferramenta desejada no painel abaixo.</p>
+        </div>
+
+        <!-- Cartão 1: Logística (1 Coluna) -->
+        <a href="viagens.html" class="tool-card">
+            <!-- A imagem de fundo (coloque um ficheiro bg-viagem.jpg na sua pasta img) -->
+            <div class="card-bg" style="background-image: url('img/bg-viagem.jpeg');"></div>
+            <div class="card-content">
+                <h2>Viajar é Preciso…</h2>
+                <p>Planeje a sua rota, defina os terrenos e calcule o custo de sua expedição.</p>
+            </div>
+        </a>
+
+        <!-- Cartão 2: Mercado (1 Coluna) -->
+        <a href="#" class="tool-card disabled">
+            <div class="card-bg" style="background-image: url('img/bg-mercado.jpeg');"></div>
+            <div class="card-content">
+                <h2>O Preço Certo...</h2>
+                <p>Gestão de compra, venda e troca de itens comuns e mágicos.</p>
+                <span class="badge-breve">Em breve</span>
+            </div>
+        </a>
+
+        <!-- Cartão 3: Fichas (1 Coluna) -->
+        <a href="#" class="tool-card disabled">
+            <div class="card-bg" style="background-image: url('img/bg-oficio.jpeg');"></div>
+            <div class="card-content">
+                <h2>Atividades de Ofício...</h2>
+                <p>Exerça suas atividades, quando estiver fora dos campos de batalhas.</p>
+                <span class="badge-breve">Em breve</span>
+            </div>
+        </a>
+
+        <!-- Rodapé Ocupa as 3 Colunas -->
+        <footer class="grid-span-3 site-footer">
+            © 2026 Dito's Party | Forjado por Me. Magalhães Filho, <i>Vecna</i>.
+        </footer>
+
     </div>
 </body>
 </html>

@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viagem</title>
+    <title>Viagem - Dito's Party</title>
+    <!-- 1. Carrega a identidade do servidor -->
+    <link rel="stylesheet" href="style.css">
+    <!-- 2. Carrega a mecânica do sistema de viagens -->
     <link rel="stylesheet" href="style-viagens.css">
 </head>
-<body>
+<body class="page-viagens">
+    
+    <!-- BANNER GIGANTE FORA DA CAIXA -->
+    <div class="banner-full-top">
+        <!-- O style inline abaixo permite que você regule o enquadramento apenas deste dragão, sem afetar o unicórnio do index -->
+        <img src="img/banner-viagens.png" alt="Banner Logística de Viagem" style="object-position: center 45%;">
+    </div>
+
+    <!-- CAIXA TRANSLÚCIDA DA CALCULADORA -->
     <div class="container">
         
         <div class="top-nav">
             <a href="index.html" class="return-link">⟵ Voltar para a Guilda</a>
-            <a href="https://discord.com/channels/1296872896563511316/1424488553097859216" target="_blank" class="discord-rules-link"> Regras de Viagem ⟶</a>
+            <a href="https://discord.com/channels/1296872896563511316/1424488553097859216" target="_blank" class="discord-rules-link">Regras de Viagem ⟶</a>
         </div>
 
         <header>
-            <h1>Logística de Expedição</h1>
-            <p class="subtitle">Planeje rotas, terreno e calcule os custos de cada membro</p>
+            <h1 style="color: var(--text-muted);">Logística de Expedição</h1>
+            <p class="subtitle">Planeje a sua rota, defina os terrenos e calcule o custo da expedição.</p>
         </header>
 
         <button id="openMapBtn" class="map-btn">🗺️ Visualizar Mapa de Faerûn</button>
-
+                
         <!-- Configuração Global -->
         <div class="control-panel">
             <div class="input-group">

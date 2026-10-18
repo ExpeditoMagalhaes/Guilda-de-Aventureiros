@@ -1,0 +1,369 @@
+/* =========================================================
+   STYLE.CSS - IDENTIDADE GLOBAL ANIMADA (DITO'S PARTY)
+   ========================================================= */
+:root {
+    --bg-input: rgba(30, 30, 30, 0.8);  /* Inputs semi-transparentes */
+    --text-main: #ffffff;               /* Texto principal em branco puro para leitura máxima */
+    --text-muted: #cccccc;              /* Texto secundário mais claro (cinza claro) */
+    --border-color: rgba(255, 255, 255, 0.2); /* Bordas levemente mais visíveis */
+    
+    /* Novas cores de alto contraste para fundos escuros */
+    --accent-primary: #fbbf24;          /* Dourado/Âmbar vibrante (Excelente legibilidade) */
+    --accent-hover: #fcd34d;            /* Dourado claro para hover */
+    --accent-blue: #38bdf8;             /* Azul celeste brilhante para botões de mapa */
+    
+    --rainbow-gradient: linear-gradient(90deg, #ff0018, #ffa52c, #ffff41, #008018, #0000f9, #86007d);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Georgia', serif;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    margin: 0;
+    min-height: 100vh;
+    
+    /* WALLPAPER ANIMADO */
+    background: linear-gradient(-45deg, #0f0c20, #4b0082, #86007d, #d63384, #000000);
+    background-size: 400% 400%;
+    animation: animateBackground 15s ease infinite;
+}
+
+@keyframes animateBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Override para a Página Inicial (Permite o banner no topo e remove a centralização do body) */
+body.page-index {
+    display: block; 
+    padding: 0;     
+}
+
+/* =========================================================
+   ESTRUTURA BASE (GLASSMORPHISM / VIDRO FOSCO)
+   ========================================================= */
+.container {
+    background-color: rgba(20, 20, 20, 0.65); /* Preto quase transparente */
+    backdrop-filter: blur(12px); /* Borra o papel de parede atrás da caixa */
+    -webkit-backdrop-filter: blur(12px); /* Suporte para Safari */
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Borda superior de arco-íris nas caixas */
+.container::before {
+    content: "";
+    display: block;
+    height: 4px;
+    background: var(--rainbow-gradient);
+    border-radius: 4px 4px 0 0;
+    margin: -30px -40px 30px -40px; 
+    width: calc(100% + 80px);
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.return-link, .discord-rules-link { 
+    display: inline-block; 
+    color: var(--accent-primary); 
+    text-decoration: none; 
+    font-weight: bold; 
+    font-size: 14px;
+    transition: color 0.2s;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Sombra para leitura no fundo de vidro */
+}
+
+.return-link:hover, .discord-rules-link:hover { 
+    text-decoration: underline; 
+    color: var(--accent-hover);
+}
+
+/* =========================================================
+   TIPOGRAFIA E FORMS GERAIS
+   ========================================================= */
+header { text-align: center; margin-bottom: 20px; }
+h1 { font-size: 28px; margin: 0 0 5px 0; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+.subtitle { font-style: italic; margin: 0; color: var(--text-muted); }
+
+.section-title { 
+    color: var(--accent-primary); 
+    margin-bottom: 15px; 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom: 5px; 
+}
+
+.divider { 
+    border: none; height: 2px; 
+    background: var(--rainbow-gradient); 
+    opacity: 0.5; margin: 20px 0; border-radius: 2px;
+}
+
+.site-footer { 
+    text-align: center; margin-top: 30px; font-size: 12px; 
+    color: var(--text-muted); border-top: 1px dashed var(--border-color); padding-top: 15px; 
+}
+
+.input-group { display: flex; flex-direction: column; width: 100%; }
+.input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: var(--text-main); }
+
+input[type="text"], input[type="number"], select {
+    width: 100%; padding: 10px; padding-right: 25px; 
+    font-family: 'Georgia', serif; font-size: 14px; 
+    color: #ffffff; background-color: var(--bg-input); 
+    border: 1px solid var(--border-color); border-radius: 4px; 
+    outline: none; transition: 0.2s;
+}
+input:focus, select:focus { border-color: var(--accent-primary); box-shadow: 0 0 8px rgba(214, 51, 132, 0.6); }
+input:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* =========================================================
+   ESTILOS EXCLUSIVOS DO HUB (INDEX) - LAYOUT EM GRELHA 3FR
+   ========================================================= */
+
+/* Limpa margens padrão e permite o wallpaper animado brilhar */
+/* Limpa margens padrão do topo para o banner encostar no teto */
+body.page-index, body.page-viagens {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 60px 0; 
+}
+
+/* O Contentor Mestre (Adicionado padding lateral para proteger o mobile) */
+.hub-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px; 
+    margin: 0 auto;
+}
+
+/* Classe utilitária para fazer itens ocuparem as 3 colunas (Banner, Título e Rodapé) */
+.grid-span-3 {
+    grid-column: span 3;
+}
+
+/* Responsividade: Se o ecrã for pequeno (telemóvel), passa para 1 coluna */
+@media (max-width: 900px) {
+    .hub-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .grid-span-3 {
+        grid-column: span 1;
+    }
+}
+
+/* Banner Principal */
+.banner-full-top {
+    position: relative; /* Necessário para a linha colorida grudar na base */
+    width: 100%;
+    height: 200px; /* AUMENTE OU DIMINUA AQUI para mostrar mais ou menos do unicórnio */
+    overflow: hidden;
+    margin-bottom: 40px;
+    /* O sombreado escuro foi removido daqui */
+}
+
+/* Cria a linha arco-íris exata na parte inferior do banner */
+.banner-full-top::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px; /* Pode deixar com 4px se quiser igual aos cards, ou 6px para mais destaque */
+    background: var(--rainbow-gradient);
+    z-index: 10;
+}
+
+.banner-full-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Faz preencher todo o espaço e corta as sobras (pernas) */
+    object-position: center 47%; /* Foca a câmera mais para cima, priorizando o chifre/rosto */
+}
+
+/* Aumenta o tamanho da fonte do subtítulo */
+.header-container .subtitle {
+    font-size: 20px; /* AUMENTE OU DIMINUA AQUI (O padrão era ~15px) */
+    margin-top: 10px;
+    color: var(--text-muted);
+}
+
+/* Cabeçalho Maior */
+.header-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header-container h1 {
+    font-size: 3.0rem; /* Título Gigante */
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+}
+
+/* ---------------------------------------------------------
+   CARTÕES TEMÁTICOS (1FR CADA)
+   --------------------------------------------------------- */
+.tool-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden; /* Mantém a imagem presa nos cantos redondos */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    text-decoration: none;
+    display: block;
+    min-height: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #000; /* Fundo base para o caso da imagem demorar a carregar */
+}
+
+/* Linha Arco-íris no Topo do Cartão */
+.tool-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: var(--rainbow-gradient);
+    z-index: 3;
+}
+
+/* A Imagem Desfocada no Fundo */
+.card-bg {
+    position: absolute;
+    top: -15px; left: -15px; right: -15px; bottom: -15px; /* Margem extra para não mostrar bordas transparentes no blur */
+    background-size: cover;
+    background-position: center;
+    filter: blur(3px) brightness(0.4); /* Aplica o blur e escurece a imagem */
+    z-index: 1;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+/* Efeito Hover - Levanta o Cartão e Foca a Imagem */
+.tool-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
+}
+.tool-card:hover .card-bg {
+    transform: scale(1.05);
+    filter: blur(1px) brightness(0.6); /* Reduz o blur ao passar o rato */
+}
+
+/* Conteúdo de Texto no Ficheiro */
+.card-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.card-content h2 {
+    color: #ffffff;
+    font-size: 26px;
+    margin: 0 0 15px 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+}
+
+.card-content p {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.9);
+    transition: color 0.3s ease;
+}
+.tool-card:hover .card-content p {
+    color: #ffffff;
+}
+
+/* Selo "Em Breve" */
+.badge-breve {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+}
+
+/* Cartões Inativos (Mercado e Fichas) */
+.tool-card.disabled {
+    cursor: not-allowed;
+}
+.tool-card.disabled .card-bg {
+    filter: blur(3px) brightness(0.4) grayscale(1);
+}
+.tool-card.disabled:hover {
+    transform: none;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+.tool-card.disabled:hover .card-bg {
+    transform: none;
+    filter: blur(1px) brightness(0.6) grayscale(1);
+}
+
+/* =========================================================
+   BOTÕES DO INDEX
+   ========================================================= */
+.btn-white {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #86007d; 
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.btn-white:hover {
+    background-color: #ffffff;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+    transform: scale(1.02);
+}
+
+.btn-disabled {
+    background-color: #444;
+    color: #999;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.btn-disabled:hover {
+    background-color: #444;
+    transform: none;
+    box-shadow: none;
+}

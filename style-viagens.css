@@ -1,203 +1,98 @@
 /* =========================================================
-   1. VARIÁVEIS E CONFIGURAÇÕES GERAIS
+   STYLE-VIAGENS.CSS - REGRAS EXCLUSIVAS DA CALCULADORA
    ========================================================= */
-:root {
-    --bg-color: #f4ecd8;
-    --text-color: #2c1e16;
-    --border-color: #8b5a2b;
-    --highlight: #5c3a21;
-}
 
-*, *::before, *::after { box-sizing: border-box; }
-
-body {
-    font-family: 'Georgia', serif;
-    background-color: #1a120c;
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-    margin: 0;
-    min-height: 100vh;
-}
-
-/* =========================================================
-   2. ESTRUTURA PRINCIPAL (Containers, Links e Rodapé)
-   ========================================================= */
-.container {
-    background-color: var(--bg-color);
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-    border: 2px solid var(--border-color);
-    width: 100%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-}
-
-.top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.return-link, .discord-rules-link { 
-    display: inline-block; 
-    color: var(--highlight); 
-    text-decoration: none; 
-    font-weight: bold; 
-    font-size: 14px;
-    transition: color 0.2s;
-}
-
-.return-link:hover, .discord-rules-link:hover { 
-    text-decoration: underline; 
-    color: #8b5a2b;
-}
-
-header { text-align: center; margin-bottom: 20px; }
-h1 { font-size: 28px; margin: 0 0 5px 0; color: var(--highlight); }
-.subtitle { font-style: italic; margin: 0; color: #666; }
-
-.section-title { color: var(--highlight); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
-.divider { border: none; border-top: 1px dashed var(--border-color); margin: 20px 0; }
-
-.site-footer { 
-    text-align: center; margin-top: 30px; font-size: 12px; color: #666; 
-    border-top: 1px dashed var(--border-color); padding-top: 15px; 
-}
-
-/* =========================================================
-   3. PADRONIZAÇÃO DE FORMULÁRIOS
-   ========================================================= */
-.input-group { display: flex; flex-direction: column; width: 100%; }
-.input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: var(--highlight); }
-
-input[type="text"], input[type="number"], select {
-    width: 100%; padding: 10px; padding-right: 25px; 
-    font-family: 'Georgia', serif; font-size: 14px; 
-    color: var(--text-color); background-color: #fff8e7; 
-    border: 1px solid var(--border-color); border-radius: 4px; 
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis; transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-select { cursor: pointer; }
-input:focus, select:focus { outline: none; border-color: var(--highlight); box-shadow: 0 0 5px rgba(139, 90, 43, 0.5); }
-input:disabled, select:disabled { background-color: #e3dccb; color: #888; cursor: not-allowed; }
-
-/* =========================================================
-   4. PAINEIS E FICHAS DE PERSONAGEM
-   ========================================================= */
+/* Paineis Superiores (Semi-transparentes para manter o Glassmorphism) */
 .control-panel {
     display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-    background-color: rgba(139, 90, 43, 0.1); padding: 15px;
-    border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 15px;
+    background-color: rgba(0, 0, 0, 0.3); padding: 15px;
+    border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;
 }
 
-.btn-add { 
-    background-color: #3b6b3b; color: #f4ecd8; border: 2px solid #234523; 
-    padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; 
-    margin-top: 5px; font-family: 'Georgia', serif; transition: 0.2s;
-}
-.btn-add:hover { background-color: #234523; }
-
+/* Fichas de Personagem */
 .char-card {
-    background-color: #fff8e7; border: 1px solid #dcb792;
-    padding: 15px; border-radius: 6px; margin-bottom: 10px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); position: relative; animation: fadeIn 0.3s;
+    background-color: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color);
+    padding: 15px; border-radius: 8px; margin-bottom: 10px;
+    position: relative; animation: fadeIn 0.3s;
 }
-.char-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #dcb792; padding-bottom: 5px; }
-.char-card-title { font-weight: bold; color: var(--highlight); }
-.btn-remove { 
-    background-color: #8b0000; color: white; border: none; padding: 5px 10px; 
-    border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;
-}
-.btn-remove:hover { background-color: #5c0000; }
-
+.char-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+.char-card-title { font-weight: bold; color: var(--text-muted); }
 .char-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-/* =========================================================
-   5. CONSTRUTOR DE ROTAS & DOWNTIME
-   ========================================================= */
+/* Botões Específicos */
+.btn-add { 
+    background-color: transparent; color: var(--accent-hover); 
+    border: 1px dashed var(--accent-primary); 
+    padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; 
+    margin-top: 5px; font-family: 'Georgia', serif; transition: 0.2s;
+}
+.btn-add:hover { background-color: rgba(214, 51, 132, 0.15); border-color: var(--accent-hover); }
+
+.btn-remove { 
+    background-color: #a81c1c; color: white; border: none; padding: 5px 10px; 
+    border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s;
+}
+.btn-remove:hover { background-color: #dc2626; }
+
+/* Construtor de Rotas & Downtime */
 .step-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; animation: fadeIn 0.3s; }
-.step-arrow { color: var(--border-color); font-size: 24px; margin-bottom: 5px; }
+.step-arrow { color: var(--accent-primary); font-size: 24px; margin-bottom: 5px; text-shadow: 0 0 5px rgba(214,51,132,0.5); }
 .step-row { display: flex; gap: 10px; width: 100%; }
 
 .downtime-group {
-    margin-top: 10px; padding: 15px; background-color: rgba(139, 90, 43, 0.1); 
-    border: 1px solid var(--border-color); border-radius: 6px;
+    margin-top: 10px; padding: 15px; background-color: rgba(0, 0, 0, 0.3); 
+    border: 1px solid var(--border-color); border-radius: 8px;
 }
 
-/* =========================================================
-   6. CAIXA DE RESUMO
-   ========================================================= */
-.summary-box { background-color: rgba(139, 90, 43, 0.1); border: 2px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px;}
+/* Caixa de Resumo e Discord */
+.summary-box { background-color: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-top: 20px;}
 .summary-box.hidden { display: none; }
 .summary-box p { margin: 8px 0; font-size: 15px; }
-.cost-highlight { background-color: var(--border-color); color: #f4ecd8; padding: 2px 8px; border-radius: 4px; }
+.cost-highlight { background-color: var(--accent-primary); color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; box-shadow: 0 0 8px rgba(214,51,132,0.5); }
 
-/* =========================================================
-   7. GERAÇÃO DE LOG DO DISCORD
-   ========================================================= */
-.discord-title { font-size: 16px; color: var(--highlight); margin-bottom: 10px; }
-.discord-box { background-color: #2b2d31; border-radius: 6px; padding: 12px; }
+.discord-title { font-size: 16px; color: var(--text-main); margin-bottom: 10px; }
+.discord-box { background-color: #1e1f22; border-radius: 6px; padding: 12px; border: 1px solid #111214; }
 .discord-box pre { margin: 0; white-space: pre-wrap; font-family: 'Consolas', monospace; font-size: 14px; color: #dbdee1; line-height: 1.5; }
-#copyBtn { margin-top: 15px; background-color: #5865F2; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; transition: background-color 0.2s;}
+#copyBtn { margin-top: 15px; background-color: #5865F2; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s;}
 #copyBtn:hover { background-color: #4752C4; }
 #copyBtn.copied { background-color: #23a559; }
 
-/* =========================================================
-   8. MODAL DO MAPA INTERATIVO
-   ========================================================= */
+/* Modal do Mapa Interativo */
 .map-btn {
-    background-color: #2b5a8a; /* Azul Temático */
-    color: #f4ecd8; border: 2px solid #163657;
+    background-color: transparent; color: var(--accent-blue); 
+    border: 1px solid var(--accent-blue);
     padding: 12px 20px; font-size: 16px; font-family: 'Georgia', serif; font-weight: bold;
     cursor: pointer; border-radius: 6px; width: 100%; margin-bottom: 20px;
-    animation: pulseBlue 2s infinite; 
+    transition: 0.2s; background-color: rgba(14, 165, 233, 0.1);
 }
-.map-btn:hover { background-color: #163657; animation: none; }
+.map-btn:hover { background-color: var(--accent-blue); color: white; box-shadow: 0 0 15px rgba(14,165,233,0.5); }
 
 .map-modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); z-index: 1000;
-    display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.9); z-index: 1000;
+    display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px);
 }
 .map-modal.hidden { display: none; }
 
 .map-modal-content {
     position: relative; width: 95vw; height: 95vh;
-    background-color: #1a120c; border: 3px solid var(--border-color);
-    border-radius: 8px; display: flex; flex-direction: column;
+    background-color: rgba(20, 20, 20, 0.9); border: 1px solid var(--border-color);
+    border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.8);
 }
 .close-map-btn {
-    align-self: center;
-    margin-top: 15px;
-    background-color: #8b0000;
+    align-self: center; margin-top: 15px; background-color: #a81c1c;
     color: white; border: none; padding: 10px 20px; font-weight: bold;
-    border-radius: 4px; cursor: pointer; z-index: 1001; transition: background-color 0.2s;
+    border-radius: 6px; cursor: pointer; z-index: 1001; transition: 0.2s;
 }
-.close-map-btn:hover { background-color: #5c0000; }
+.close-map-btn:hover { background-color: #dc2626; }
 
-.map-instructions { text-align: center; color: #aaa; margin: 15px 0 5px 0; font-size: 14px; }
+.map-instructions { text-align: center; color: var(--text-muted); margin: 15px 0 5px 0; font-size: 14px; }
 .map-container {
     flex-grow: 1; overflow: hidden; position: relative; cursor: grab;
-    margin: 10px; border: 1px solid var(--border-color); background-color: #000;
+    margin: 10px; border: 1px solid var(--border-color); background-color: #000; border-radius: 6px;
     touch-action: none;
 }
 .map-container:active { cursor: grabbing; }
-
 #mapImage { position: absolute; transform-origin: 0 0; pointer-events: none; }
 
-/* =========================================================
-   9. ANIMAÇÕES
-   ========================================================= */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulseBlue {
-    0% { box-shadow: 0 0 5px #2b5a8a; }
-    50% { box-shadow: 0 0 15px #60a5fa, 0 0 20px #2b5a8a; }
-    100% { box-shadow: 0 0 5px #2b5a8a; }
-}
