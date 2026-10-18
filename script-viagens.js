@@ -339,9 +339,9 @@ function updateSummary() {
     discordText.textContent = `**Comitiva:** ${discordCharsLog.join(', ')}
     **Caminho:** ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}
 
-    **Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
-    **Encontros:** ${encountersSelect.value}
-    **Dias de Viagem:** ${discordCurrentDay} / ${totalDaysInGame} (${downtime} dia(s) de Downtime)`;
+**Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
+**Encontros:** ${encountersSelect.value}
+**Dias de Viagem:** ${discordCurrentDay} / ${totalDaysInGame} (${downtime} dia(s) de Downtime)`;
 
     summaryBox.classList.remove('hidden');
 }
