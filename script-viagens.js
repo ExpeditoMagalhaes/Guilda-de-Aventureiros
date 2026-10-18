@@ -1,19 +1,20 @@
 // =========================================================
-// VARIÁVEIS DE ESTADO E ELEMENTOS DOM (Formulário e Rota)
+// VARIÁVEIS DE ESTADO
 // =========================================================
 let routePath = []; 
+let travelerIndexCounter = 0; 
 const container = document.getElementById('steps-container');
 const charactersContainer = document.getElementById('characters-container');
 const transportSelect = document.getElementById('transportMode');
-const travelersCountInput = document.getElementById('travelersCount');
+const encountersSelect = document.getElementById('encounters');
+const downtimeInput = document.getElementById('downtimeDays');
 const summaryBox = document.getElementById('summary-box');
 const summaryContent = document.getElementById('summary-content');
 const discordText = document.getElementById('discordText');
 const copyBtn = document.getElementById('copyBtn');
+const addTravelerBtn = document.getElementById('addTravelerBtn');
 
-// =========================================================
-// VARIÁVEIS E ELEMENTOS DOM (Mapa Interativo)
-// =========================================================
+// Mapa
 const mapModal = document.getElementById('mapModal');
 const openMapBtn = document.getElementById('openMapBtn');
 const closeMapBtn = document.getElementById('closeMapBtn');
@@ -26,73 +27,96 @@ let startX = 0, startY = 0;
 let translateX = 0, translateY = 0;
 
 // =========================================================
-// OUVINTES DE EVENTOS PRINCIPAIS
+// OUVINTES GLOBAIS
 // =========================================================
-transportSelect.addEventListener('change', () => { renderCharacters(); resetBuilder(); });
-travelersCountInput.addEventListener('input', renderCharacters);
+transportSelect.addEventListener('change', () => { refreshAllCharactersUI(); resetBuilder(); });
+encountersSelect.addEventListener('change', updateSummary);
+downtimeInput.addEventListener('input', updateSummary);
 copyBtn.addEventListener('click', copyToClipboard);
+addTravelerBtn.addEventListener('click', addTraveler);
 
-// --- 1. RENDERIZAÇÃO DOS PERSONAGENS ---
-function renderCharacters() {
-    const count = Math.max(1, parseInt(travelersCountInput.value) || 1);
+// =========================================================
+// 1. SISTEMA DINÂMICO DE PERSONAGENS
+// =========================================================
+function addTraveler() {
+    travelerIndexCounter++;
+    const cardId = `char-${travelerIndexCounter}`;
     const globalRule = transportRules[transportSelect.value];
-    charactersContainer.innerHTML = '';
+    
+    // O primeiro membro nunca terá botão de excluir
+    const isFirstMember = charactersContainer.children.length === 0;
+    const removeBtnHtml = isFirstMember ? '' : `<button class="btn-remove" onclick="removeTraveler('${cardId}')">Remover</button>`;
 
-    for (let i = 0; i < count; i++) {
-        const card = document.createElement('div');
-        card.className = 'char-card';
-        
-        let mountOptionsHtml = '';
-        if (globalRule.isCollective) {
-            const forbid = globalRule.forbidMounts ? 'disabled' : '';
-            mountOptionsHtml = `
-                <select class="char-mount" ${forbid}>
-                    <option value="none">Sem montaria</option>
-                    ${!globalRule.forbidMounts ? '<option value="has_mount">Levando Montaria</option>' : ''}
-                </select>
-            `;
-        } else {
-            mountOptionsHtml = `
-                <select class="char-mount">
-                    <option value="ape">A Pé (30 ft)</option>
-                    <option value="cavalo_carga">Cavalo de Carga (40 ft)</option>
-                    <option value="cavalo_rapido">Cavalo Rápido (60 ft)</option>
-                </select>
-            `;
-        }
-
-        card.innerHTML = `
-            <span class="char-card-title">Membro ${i + 1}</span>
-            <div class="char-grid">
-                <div class="input-group">
-                    <label>Nome:</label>
-                    <input type="text" class="char-name" placeholder="Ex: @Guerreiro" value="Personagem ${i + 1}">
-                </div>
-                <div class="input-group">
-                    <label>Transporte/Montaria:</label>
-                    ${mountOptionsHtml}
-                </div>
-                <div style="grid-column: span 2; margin-top: 5px;">
-                    <span style="font-size: 13px; font-weight: bold; color: var(--highlight); margin-bottom: 5px; display: block;">Provisões da Viagem:</span>
-                    <div style="display: flex; gap: 15px;">
-                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px;">
-                            <input type="radio" name="prov_${i}" class="char-provision" value="comprada" checked style="accent-color: var(--highlight); transform: scale(1.2);"> Compradas
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px;">
-                            <input type="radio" name="prov_${i}" class="char-provision" value="magia" style="accent-color: var(--highlight); transform: scale(1.2);"> Magia
-                        </label>
-                    </div>
-                </div>
-            </div>
+    const card = document.createElement('div');
+    card.className = 'char-card';
+    card.id = cardId;
+    
+    let mountOptionsHtml = '';
+    if (globalRule.isCollective) {
+        const forbid = globalRule.forbidMounts ? 'disabled' : '';
+        mountOptionsHtml = `
+            <select class="char-mount" ${forbid}>
+                <option value="none">Sem montaria</option>
+                ${!globalRule.forbidMounts ? '<option value="has_mount">Levando Montaria Extra</option>' : ''}
+            </select>
         `;
-        
-        card.querySelectorAll('input, select').forEach(el => el.addEventListener('change', updateSummary));
-        charactersContainer.appendChild(card);
+    } else {
+        mountOptionsHtml = `
+            <select class="char-mount">
+                <option value="ape">${globalRule.modes['ape'].name}</option>
+                <option value="cavalo_carga">${globalRule.modes['cavalo_carga'].name}</option>
+                <option value="cavalo_rapido">${globalRule.modes['cavalo_rapido'].name}</option>
+            </select>
+        `;
     }
+
+    card.innerHTML = `
+        <div class="char-header">
+            <span class="char-card-title">Membro da Comitiva</span>
+            ${removeBtnHtml}
+        </div>
+        <div class="char-grid">
+            <div class="input-group">
+                <label>Nome:</label>
+                <input type="text" class="char-name" placeholder="@Guerreiro" value="Personagem ${travelerIndexCounter}">
+            </div>
+            <div class="input-group">
+                <label>Modo/Montaria:</label>
+                ${mountOptionsHtml}
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Provisões da Viagem:</label>
+                <select class="char-provision">
+                    <option value="paga">Compradas (Nenhuma Magia)</option>
+                    <option value="magia_comida">Magia (Somente Comida)</option>
+                    <option value="magia_agua">Magia (Somente Água)</option>
+                    <option value="magia_tudo">Magia (Comida e Água)</option>
+                </select>
+            </div>
+        </div>
+    `;
+    
+    card.querySelectorAll('input, select').forEach(el => el.addEventListener('change', updateSummary));
+    charactersContainer.appendChild(card);
     updateSummary();
 }
 
-// --- 2. CONSTRUTOR DE ROTAS ---
+function removeTraveler(cardId) {
+    document.getElementById(cardId).remove();
+    updateSummary();
+}
+
+function refreshAllCharactersUI() {
+    const currentCount = charactersContainer.children.length;
+    charactersContainer.innerHTML = '';
+    travelerIndexCounter = 0;
+    let countToRender = currentCount === 0 ? 1 : currentCount;
+    for (let i = 0; i < countToRender; i++) addTraveler();
+}
+
+// =========================================================
+// 2. CONSTRUTOR DE ROTAS
+// =========================================================
 function resetBuilder() {
     routePath = [];
     container.innerHTML = '';
@@ -138,7 +162,7 @@ function renderStep(stepIndex) {
     availableCities.sort();
 
     if (stepIndex > 0 && availableCities.length === 0) {
-        row.innerHTML = `<p style="color: #8b0000; font-style: italic; margin:0;">Fim da rota. Nenhuma conexão disponível.</p>`;
+        row.innerHTML = `<p style="color: #8b0000; font-style: italic; margin:0;">Fim da rota. Nenhuma conexão.</p>`;
         wrapper.appendChild(row);
         container.appendChild(wrapper);
         return;
@@ -179,14 +203,22 @@ function renderStep(stepIndex) {
     container.appendChild(wrapper);
 }
 
-// --- 3. MATEMÁTICA E RESUMO ---
-function formatCurrency(totalSp) {
-    const gp = Math.floor(totalSp / 10);
-    const sp = totalSp % 10;
+// =========================================================
+// 3. MATEMÁTICA, CUSTOS E RESUMO
+// =========================================================
+function formatCurrencyFromCp(totalCp, isIndividual = false) {
+    const gp = Math.floor(totalCp / 100);
+    const sp = Math.floor((totalCp % 100) / 10);
+    const cp = totalCp % 10;
     let res = [];
     if (gp > 0) res.push(`${gp} PO`);
     if (sp > 0) res.push(`${sp} PP`);
-    return res.length === 0 ? "0 (Viagem 100% Mágica)" : res.join(' e ');
+    if (cp > 0) res.push(`${cp} PC`);
+    
+    if (res.length === 0) {
+        return isIndividual ? "0 PC" : "0 (Viagem Totalmente Mágica)";
+    }
+    return res.join(' e ');
 }
 
 function updateSummary() {
@@ -222,61 +254,91 @@ function updateSummary() {
 
         totalFractionalDays += (dist / stepPace);
         totalMiles += dist;
-        pathLog.push(`${to} (${globalRule.conditions[condition] || "Mar Aberto"})`);
+        pathLog.push(`${to}`);
     }
 
-    const totalDaysRounded = Math.ceil(totalFractionalDays);
+    // Dias Totais da Viagem in-game
+    const totalDaysInGame = Math.ceil(totalFractionalDays);
+    
+    // Matemática do Contador Discord (Começa em 1 + Downtime)
+    const downtime = Math.max(0, parseInt(downtimeInput.value) || 0);
+    const discordCurrentDay = 1 + downtime;
 
-    let dailyGroupCostSp = 0;
+    let dailyGroupCostCp = 0;
     let discordCharsLog = [];
 
+    // Cálculo Econômico por Personagem
     cards.forEach(card => {
-        const name = card.querySelector('.char-name').value || "Desconhecido";
+        const name = card.querySelector('.char-name').value || "Viajante";
         const mountInput = card.querySelector('.char-mount').value;
-        const provInput = card.querySelector('.char-provision:checked').value;
+        const provInput = card.querySelector('.char-provision').value;
 
-        let charDailySp = 0;
-        let provText = provInput === 'magia' ? "(Magia)" : "(Pago)";
+        let charDailyCp = 0;
         let mountText = "";
+        let hasMount = false;
+
+        let foodCostCp = globalRule.baseTravelerCostSp * 10;
+        let waterCostCp = gameEconomy.waterTravelerCostCp;
+
+        if (provInput === 'magia_comida' || provInput === 'magia_tudo') foodCostCp = 0;
+        if (provInput === 'magia_agua' || provInput === 'magia_tudo') waterCostCp = 0;
+
+        charDailyCp += (foodCostCp + waterCostCp);
 
         if (globalRule.isCollective) {
-            charDailySp += globalRule.baseTravelerCostSp; 
-            if (provInput === 'magia') charDailySp = Math.max(0, charDailySp - 5);
-            
             if (mountInput === 'has_mount') {
-                charDailySp += globalRule.mountCostSp;
-                mountText = " c/ Montaria Extra";
+                hasMount = true;
+                let mountFoodCp = globalRule.mountCostSp * 10;
+                let mountWaterCp = gameEconomy.waterMountCostCp;
+                
+                if (provInput === 'magia_comida' || provInput === 'magia_tudo') mountFoodCp = 0;
+                if (provInput === 'magia_agua' || provInput === 'magia_tudo') mountWaterCp = 0;
+                
+                charDailyCp += (mountFoodCp + mountWaterCp);
+                mountText = " c/ Montaria";
             }
         } else {
-            charDailySp += globalRule.baseTravelerCostSp; 
-            if (provInput === 'magia') charDailySp = Math.max(0, charDailySp - 5);
-            
-            charDailySp += globalRule.modes[mountInput].mountCostSp; 
-            mountText = ` [${globalRule.modes[mountInput].name}]`;
+            if (mountInput !== 'ape') hasMount = true;
+            let mountFoodCp = globalRule.modes[mountInput].mountCostSp * 10;
+            let mountWaterCp = hasMount ? gameEconomy.waterMountCostCp : 0;
+
+            if (provInput === 'magia_comida' || provInput === 'magia_tudo') mountFoodCp = 0;
+            if (provInput === 'magia_agua' || provInput === 'magia_tudo') mountWaterCp = 0;
+
+            charDailyCp += (mountFoodCp + mountWaterCp);
+            mountText = ` ${globalRule.modes[mountInput].discordTag}`;
         }
 
-        dailyGroupCostSp += charDailySp;
-        discordCharsLog.push(`${name}${mountText} ${provText}`);
+        dailyGroupCostCp += charDailyCp;
+        
+        // Formata o custo individual deste personagem para a viagem toda
+        const totalCharCostCp = charDailyCp * totalDaysInGame;
+        let individualCostString = formatCurrencyFromCp(totalCharCostCp, true);
+        
+        // Se a viagem for sustentada totalmente por magia e custo zerou
+        if (totalCharCostCp === 0 && provInput !== 'paga') {
+            individualCostString = "Sustentado por Magia";
+        }
+
+        discordCharsLog.push(`${name}${mountText} (${individualCostString})`);
     });
 
-    const finalTotalCostSp = dailyGroupCostSp * totalDaysRounded;
-    const finalFormattedCost = formatCurrency(finalTotalCostSp);
+    const finalTotalCostCp = dailyGroupCostCp * totalDaysInGame;
+    const finalFormattedCost = formatCurrencyFromCp(finalTotalCostCp);
 
     summaryContent.innerHTML = `
-        <p><strong>Caminho:</strong> ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}</p>
         <p><strong>Distância Total:</strong> ${totalMiles} milhas</p>
-        <p><strong>Dias de Viagem:</strong> ${totalDaysRounded} dia(s)</p>
-        <p><strong>Custo Total do Grupo:</strong> <span class="cost-highlight">${finalFormattedCost}</span></p>
+        <p><strong>Dias de Viagem (In-Game):</strong> ${totalDaysInGame} dia(s)</p>
+        <p><strong>Custo Final (Grupo):</strong> <span class="cost-highlight">${finalFormattedCost}</span></p>
     `;
 
     discordText.textContent = `**Comitiva:** ${discordCharsLog.join(', ')}
-**Partida:** ${routePath[0].city}
-**Destino:** ${routePath[routePath.length - 1].city}
+**Caminho:** ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}
 
 **Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
-**Trajeto(s):** ${pathLog.join(', ')}
+**Encontros:** ${encountersSelect.value}
 **Custo Total (Grupo):** ${finalFormattedCost}
-**Dias de Viagem:** 0 / ${totalDaysRounded}`;
+**Dias de Viagem:** ${discordCurrentDay} / ${totalDaysInGame} (${downtime} dia(s) de Downtime)`;
 
     summaryBox.classList.remove('hidden');
 }
@@ -284,52 +346,44 @@ function updateSummary() {
 function copyToClipboard() {
     navigator.clipboard.writeText(discordText.textContent).then(() => {
         const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = "✅ Copiado!";
+        copyBtn.innerHTML = "📋 Copiado!";
         copyBtn.classList.add("copied");
         setTimeout(() => { copyBtn.innerHTML = originalText; copyBtn.classList.remove("copied"); }, 2000);
     });
 }
 
-// --- 4. SISTEMA DE MAPA INTERATIVO (PAN & ZOOM) ---
-
-// Abre o Modal e centraliza a imagem
+// =========================================================
+// 4. MAPA INTERATIVO (Pan & Zoom)
+// =========================================================
 if(openMapBtn) {
     openMapBtn.addEventListener('click', () => {
         mapModal.classList.remove('hidden');
-        mapScale = 0.5; // Começa menor para caber na tela
-        translateX = 0; 
-        translateY = 0;
+        mapScale = 0.5; translateX = 0; translateY = 0;
         updateMapTransform();
     });
 }
 
-// Fecha o Modal
 if(closeMapBtn) {
     closeMapBtn.addEventListener('click', () => {
         mapModal.classList.add('hidden');
     });
 }
 
-// Aplica a matemática visual no CSS da imagem
 function updateMapTransform() {
-    if(mapImage) {
-        mapImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${mapScale})`;
-    }
+    if(mapImage) mapImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${mapScale})`;
 }
 
-// Zoom com o Scroll do Mouse
 if(mapContainer) {
     mapContainer.addEventListener('wheel', (e) => {
         e.preventDefault(); 
         const zoomSpeed = 0.1;
         const direction = e.deltaY < 0 ? 1 : -1; 
-        
         const rect = mapContainer.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
         let newScale = mapScale + (direction * zoomSpeed);
-        newScale = Math.min(Math.max(0.1, newScale), 5); // Limites de zoom
+        newScale = Math.min(Math.max(0.1, newScale), 5);
 
         const ratio = 1 - (newScale / mapScale);
         translateX += (mouseX - translateX) * ratio;
@@ -339,14 +393,12 @@ if(mapContainer) {
         updateMapTransform();
     });
 
-    // Mover a imagem com o Clique (Pan)
     mapContainer.addEventListener('mousedown', (e) => {
         e.preventDefault();
         isPanning = true;
         startX = e.clientX - translateX;
         startY = e.clientY - translateY;
     });
-
     mapContainer.addEventListener('mousemove', (e) => {
         if (!isPanning) return;
         e.preventDefault();
@@ -354,13 +406,26 @@ if(mapContainer) {
         translateY = e.clientY - startY;
         updateMapTransform();
     });
-
     mapContainer.addEventListener('mouseup', () => isPanning = false);
     mapContainer.addEventListener('mouseleave', () => isPanning = false);
+
+    mapContainer.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            isPanning = true;
+            startX = e.touches[0].clientX - translateX;
+            startY = e.touches[0].clientY - translateY;
+        }
+    });
+    mapContainer.addEventListener('touchmove', (e) => {
+        if (!isPanning || e.touches.length !== 1) return;
+        e.preventDefault();
+        translateX = e.touches[0].clientX - startX;
+        translateY = e.touches[0].clientY - startY;
+        updateMapTransform();
+    }, { passive: false });
+    mapContainer.addEventListener('touchend', () => isPanning = false);
 }
 
-// =========================================================
-// INICIALIZAÇÃO DA PÁGINA
-// =========================================================
-renderCharacters();
+// INICIALIZAÇÃO
+addTraveler(); 
 resetBuilder();

@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logística de Faerûn - D&D</title>
+    <title>Viagem</title>
     <link rel="stylesheet" href="style-viagens.css">
 </head>
 <body>
     <div class="container">
         
+        <a href="index.html" class="return-link">⟵ Voltar para a Guilda</a>
+
         <header>
             <h1>Logística de Expedição</h1>
             <p class="subtitle">Planeje rotas, terreno e calcule os custos de cada membro</p>
@@ -29,13 +31,18 @@
                 </select>
             </div>
             <div class="input-group">
-                <label for="travelersCount">Número de Viajantes:</label>
-                <input type="number" id="travelersCount" value="1" min="1" max="10">
+                <label for="encounters">Possibilidade de Encontros?</label>
+                <select id="encounters">
+                    <option value="Sim (Preparem-se)">Sim</option>
+                    <option value="Viagem Segura">Não</option>
+                </select>
             </div>
         </div>
 
-        <!-- Área dos Personagens -->
+        <!-- Área Dinâmica dos Personagens -->
+        <h3 class="section-title">Comitiva de Viagem</h3>
         <div id="characters-container"></div>
+        <button id="addTravelerBtn" class="btn-add">Adicionar Viajante</button>
 
         <hr class="divider">
         <h3 class="section-title">Mapa e Rota</h3>
@@ -43,6 +50,12 @@
         <!-- Construtor de Rota -->
         <div id="route-builder">
             <div id="steps-container"></div>
+        </div>
+
+        <!-- Ajuste de Downtime (Agora no final da rota) -->
+        <div class="input-group downtime-group">
+            <label for="downtimeDays">Dias de Downtime Utilizados:</label>
+            <input type="number" id="downtimeDays" value="0" min="0">
         </div>
 
         <!-- Área de Resumo e Discord -->
@@ -56,16 +69,20 @@
                 <button id="copyBtn">📋 Copiar Texto</button>
             </div>
         </div>
+        
+        <footer class="site-footer">
+            © 2026 Dito's Party | Forjado por Me. Magalhães Filho, <i>Vecna</i>. 
+        </footer>
 
     </div>
 
     <!-- Modal do Mapa Interativo -->
     <div id="mapModal" class="map-modal hidden">
         <div class="map-modal-content">
-            <button id="closeMapBtn" class="close-map-btn">❌ Fechar Mapa</button>
-            <p class="map-instructions">Use o <strong>Scroll do Mouse</strong> para dar zoom e <strong>Clique e Arraste</strong> para mover.</p>
+            <button id="closeMapBtn" class="close-map-btn">Fechar Mapa</button>
+            <p class="map-instructions">Use o Scroll do Mouse ou os Dedos para dar zoom, Clique e Arraste para mover.</p>
             <div id="mapContainer" class="map-container">
-                <img id="mapImage" src="img/mapa.jpg" alt="Mapa da Costa da Espada">
+                <img id="mapImage" src="img/mapa-faerun.jpg" alt="Mapa da Costa da Espada">
             </div>
         </div>
     </div>

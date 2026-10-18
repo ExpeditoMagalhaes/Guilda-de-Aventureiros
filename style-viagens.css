@@ -8,10 +8,7 @@
     --highlight: #5c3a21;
 }
 
-/* O box-sizing garante que padding e bordas não estiquem os elementos para fora da tela */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     font-family: 'Georgia', serif;
@@ -25,7 +22,7 @@ body {
 }
 
 /* =========================================================
-   2. ESTRUTURA PRINCIPAL (Containers e Títulos)
+   2. ESTRUTURA PRINCIPAL (Containers, Links e Rodapé)
    ========================================================= */
 .container {
     background-color: var(--bg-color);
@@ -39,301 +36,151 @@ body {
     flex-direction: column;
 }
 
-header { 
-    text-align: center; 
-    margin-bottom: 20px; 
+.return-link { 
+    display: inline-block; color: var(--highlight); text-decoration: none; 
+    font-weight: bold; margin-bottom: 15px; font-size: 14px;
 }
+.return-link:hover { text-decoration: underline; }
 
-h1 { 
-    font-size: 28px; 
-    margin: 0 0 5px 0; 
-    color: var(--highlight); 
-}
+header { text-align: center; margin-bottom: 20px; }
+h1 { font-size: 28px; margin: 0 0 5px 0; color: var(--highlight); }
+.subtitle { font-style: italic; margin: 0; color: #666; }
 
-.subtitle { 
-    font-style: italic; 
-    margin: 0; 
-    color: #666; 
-}
+.section-title { color: var(--highlight); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+.divider { border: none; border-top: 1px dashed var(--border-color); margin: 20px 0; }
 
-.section-title { 
-    color: var(--highlight); 
-    margin-bottom: 15px; 
-    border-bottom: 1px solid var(--border-color); 
-    padding-bottom: 5px; 
-}
-
-.divider { 
-    border: none; 
-    border-top: 1px dashed var(--border-color); 
-    margin: 20px 0; 
+.site-footer { 
+    text-align: center; margin-top: 30px; font-size: 12px; color: #666; 
+    border-top: 1px dashed var(--border-color); padding-top: 15px; 
 }
 
 /* =========================================================
-   3. PADRONIZAÇÃO DE FORMULÁRIOS (Inputs e Selects unificados)
+   3. PADRONIZAÇÃO DE FORMULÁRIOS
    ========================================================= */
-.input-group { 
-    display: flex; 
-    flex-direction: column; 
+.input-group { display: flex; flex-direction: column; width: 100%; }
+.input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: var(--highlight); }
+
+input[type="text"], input[type="number"], select {
+    width: 100%; padding: 10px; padding-right: 25px; 
+    font-family: 'Georgia', serif; font-size: 14px; 
+    color: var(--text-color); background-color: #fff8e7; 
+    border: 1px solid var(--border-color); border-radius: 4px; 
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.input-group label { 
-    font-size: 13px; 
-    font-weight: bold; 
-    margin-bottom: 5px; 
-    color: var(--highlight); 
-}
-
-/* Regra Mestra: Todos os campos de digitação e seleção serão idênticos */
-input[type="text"], 
-input[type="number"], 
-select {
-    width: 100%;
-    padding: 10px; 
-    font-family: 'Georgia', serif; 
-    font-size: 14px; 
-    color: var(--text-color);
-    background-color: #fff8e7; 
-    border: 1px solid var(--border-color);
-    border-radius: 4px; 
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-select { 
-    cursor: pointer; 
-}
-
-input:focus, 
-select:focus {
-    outline: none;
-    border-color: var(--highlight);
-    box-shadow: 0 0 5px rgba(139, 90, 43, 0.5);
-}
-
-input:disabled, 
-select:disabled { 
-    background-color: #e3dccb; 
-    color: #888; 
-    cursor: not-allowed; 
-}
+select { cursor: pointer; }
+input:focus, select:focus { outline: none; border-color: var(--highlight); box-shadow: 0 0 5px rgba(139, 90, 43, 0.5); }
+input:disabled, select:disabled { background-color: #e3dccb; color: #888; cursor: not-allowed; }
 
 /* =========================================================
    4. PAINEIS E FICHAS DE PERSONAGEM
    ========================================================= */
 .control-panel {
-    display: grid; 
-    grid-template-columns: 2fr 1fr; 
-    gap: 15px;
-    background-color: rgba(139, 90, 43, 0.1); 
-    padding: 15px;
-    border-radius: 6px; 
-    border: 1px solid var(--border-color); 
-    margin-bottom: 15px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+    background-color: rgba(139, 90, 43, 0.1); padding: 15px;
+    border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 15px;
 }
+
+.btn-add { 
+    background-color: #3b6b3b; color: #f4ecd8; border: 2px solid #234523; 
+    padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; 
+    margin-top: 5px; font-family: 'Georgia', serif; transition: 0.2s;
+}
+.btn-add:hover { background-color: #234523; }
 
 .char-card {
-    background-color: #fff8e7; 
-    border: 1px solid #dcb792;
-    padding: 15px; 
-    border-radius: 6px; 
-    margin-bottom: 10px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    background-color: #fff8e7; border: 1px solid #dcb792;
+    padding: 15px; border-radius: 6px; margin-bottom: 10px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); position: relative; animation: fadeIn 0.3s;
 }
-
-.char-card-title { 
-    font-weight: bold; 
-    color: var(--highlight); 
-    margin-bottom: 10px; 
-    display: block;
+.char-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #dcb792; padding-bottom: 5px; }
+.char-card-title { font-weight: bold; color: var(--highlight); }
+.btn-remove { 
+    background-color: #8b0000; color: white; border: none; padding: 5px 10px; 
+    border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;
 }
+.btn-remove:hover { background-color: #5c0000; }
 
-.char-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 10px; 
+.char-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+/* =========================================================
+   5. CONSTRUTOR DE ROTAS & DOWNTIME
+   ========================================================= */
+.step-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; animation: fadeIn 0.3s; }
+.step-arrow { color: var(--border-color); font-size: 24px; margin-bottom: 5px; }
+.step-row { display: flex; gap: 10px; width: 100%; }
+
+.downtime-group {
+    margin-top: 10px; padding: 15px; background-color: rgba(139, 90, 43, 0.1); 
+    border: 1px solid var(--border-color); border-radius: 6px;
 }
 
 /* =========================================================
-   5. CONSTRUTOR DE ROTAS
+   6. CAIXA DE RESUMO
    ========================================================= */
-.step-wrapper { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    margin-bottom: 15px; 
-    animation: fadeIn 0.3s; 
-}
-
-.step-arrow { 
-    color: var(--border-color); 
-    font-size: 24px; 
-    margin-bottom: 5px; 
-}
-
-.step-row { 
-    display: flex; 
-    gap: 10px; 
-    width: 100%; 
-}
-
-/* =========================================================
-   6. CAIXA DE RESUMO (Matemática)
-   ========================================================= */
-.summary-box { 
-    background-color: rgba(139, 90, 43, 0.1); 
-    border: 2px solid var(--border-color); 
-    border-radius: 6px; 
-    padding: 15px; 
-    margin-top: 20px;
-}
-
-.summary-box.hidden { 
-    display: none; 
-}
-
-.summary-box p { 
-    margin: 8px 0; 
-    font-size: 15px; 
-}
-
-.cost-highlight { 
-    background-color: var(--border-color); 
-    color: #f4ecd8; 
-    padding: 2px 8px; 
-    border-radius: 4px; 
-}
+.summary-box { background-color: rgba(139, 90, 43, 0.1); border: 2px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px;}
+.summary-box.hidden { display: none; }
+.summary-box p { margin: 8px 0; font-size: 15px; }
+.cost-highlight { background-color: var(--border-color); color: #f4ecd8; padding: 2px 8px; border-radius: 4px; }
 
 /* =========================================================
    7. GERAÇÃO DE LOG DO DISCORD
    ========================================================= */
-.discord-title { 
-    font-size: 16px; 
-    color: var(--highlight); 
-    margin-bottom: 10px; 
-}
-
-.discord-box { 
-    background-color: #2b2d31; 
-    border-radius: 6px; 
-    padding: 12px; 
-}
-
-.discord-box pre { 
-    margin: 0; 
-    white-space: pre-wrap; 
-    font-family: 'Consolas', monospace; 
-    font-size: 14px; 
-    color: #dbdee1; 
-    line-height: 1.5; 
-}
-
-#copyBtn { 
-    margin-top: 15px; 
-    background-color: #5865F2; 
-    color: white; 
-    border: none; 
-    padding: 10px; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    font-weight: bold; 
-    width: 100%; 
-    transition: background-color 0.2s;
-}
-
+.discord-title { font-size: 16px; color: var(--highlight); margin-bottom: 10px; }
+.discord-box { background-color: #2b2d31; border-radius: 6px; padding: 12px; }
+.discord-box pre { margin: 0; white-space: pre-wrap; font-family: 'Consolas', monospace; font-size: 14px; color: #dbdee1; line-height: 1.5; }
+#copyBtn { margin-top: 15px; background-color: #5865F2; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; transition: background-color 0.2s;}
 #copyBtn:hover { background-color: #4752C4; }
 #copyBtn.copied { background-color: #23a559; }
 
 /* =========================================================
-   8. MODAL DO MAPA INTERATIVO (Pan & Zoom)
+   8. MODAL DO MAPA INTERATIVO
    ========================================================= */
 .map-btn {
-    background-color: var(--highlight);
-    color: #f4ecd8;
-    border: 2px solid #3a2212;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-family: 'Georgia', serif;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
-    width: 100%;
-    margin-bottom: 20px;
-    transition: background-color 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    background-color: #2b5a8a; /* Azul Temático */
+    color: #f4ecd8; border: 2px solid #163657;
+    padding: 12px 20px; font-size: 16px; font-family: 'Georgia', serif; font-weight: bold;
+    cursor: pointer; border-radius: 6px; width: 100%; margin-bottom: 20px;
+    animation: pulseBlue 2s infinite; 
 }
-
-.map-btn:hover { background-color: #3a2212; }
+.map-btn:hover { background-color: #163657; animation: none; }
 
 .map-modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); 
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(5px);
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); z-index: 1000;
+    display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px);
 }
-
 .map-modal.hidden { display: none; }
 
 .map-modal-content {
-    position: relative;
-    width: 95vw;
-    height: 95vh;
-    background-color: #1a120c;
-    border: 3px solid var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
+    position: relative; width: 95vw; height: 95vh;
+    background-color: #1a120c; border: 3px solid var(--border-color);
+    border-radius: 8px; display: flex; flex-direction: column;
 }
-
 .close-map-btn {
-    position: absolute;
-    top: 10px; right: 20px;
-    background-color: #8b0000;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    z-index: 1001;
-    transition: background-color 0.2s;
+    position: absolute; top: 10px; right: 20px; background-color: #8b0000;
+    color: white; border: none; padding: 10px 15px; font-weight: bold;
+    border-radius: 4px; cursor: pointer; z-index: 1001; transition: background-color 0.2s;
 }
-
 .close-map-btn:hover { background-color: #5c0000; }
 
-.map-instructions {
-    text-align: center;
-    color: #aaa;
-    margin: 15px 0 5px 0;
-    font-size: 14px;
-}
-
+.map-instructions { text-align: center; color: #aaa; margin: 15px 0 5px 0; font-size: 14px; }
 .map-container {
-    flex-grow: 1;
-    overflow: hidden; 
-    position: relative;
-    cursor: grab;
-    margin: 10px;
-    border: 1px solid var(--border-color);
-    background-color: #000;
+    flex-grow: 1; overflow: hidden; position: relative; cursor: grab;
+    margin: 10px; border: 1px solid var(--border-color); background-color: #000;
+    touch-action: none;
 }
-
 .map-container:active { cursor: grabbing; }
 
-#mapImage {
-    position: absolute;
-    transform-origin: 0 0; 
-    pointer-events: none; 
-}
+#mapImage { position: absolute; transform-origin: 0 0; pointer-events: none; }
 
 /* =========================================================
    9. ANIMAÇÕES
    ========================================================= */
-@keyframes fadeIn { 
-    from { opacity: 0; transform: translateY(-10px); } 
-    to { opacity: 1; transform: translateY(0); } 
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulseBlue {
+    0% { box-shadow: 0 0 5px #2b5a8a; }
+    50% { box-shadow: 0 0 15px #60a5fa, 0 0 20px #2b5a8a; }
+    100% { box-shadow: 0 0 5px #2b5a8a; }
 }

@@ -1,4 +1,11 @@
-// --- MATRIZES DE DISTÂNCIA ---
+// --- 1. ECONOMIA E CUSTOS (Fácil Manutenção) ---
+const gameEconomy = {
+    rationCostSp: 5,        // Custo da ração por dia (5 Peças de Prata)
+    waterTravelerCostCp: 5, // Custo da água para viajante (5 Peças de Cobre)
+    waterMountCostCp: 5     // Custo da água para montaria (5 Peças de Cobre)
+};
+
+// --- 2. MATRIZES DE DISTÂNCIA ---
 const landDistanceMatrix = {
     "Amnwater": { "Crimmor": 98, "Keczulla": 93, "Minsor Vale": 72 },
     "Amphail": { "Rassalantar": 28, "Red Larch": 83 },
@@ -97,19 +104,19 @@ const seaDistanceMatrix = {
     "Baldur's Gate": { "Waterdeep": 600 }
 };
 
-// --- REGRAS DO MESTRE ---
+// --- 3. REGRAS DO MESTRE ---
 const transportRules = {
     "individual": {
         name: "Deslocamento Individual",
         matrix: landDistanceMatrix,
         hasConditions: true,
         conditions: { "estrada": "Por Estrada", "sem_estrada": "Sem Estrada" },
-        modes: { // Velocidades individuais baseadas no PHB
-            "ape": { name: "A Pé", mph: { estrada: 32, sem_estrada: 24 }, mountCostSp: 0 },
-            "cavalo_rapido": { name: "Cavalo Rápido", mph: { estrada: 64, sem_estrada: 52 }, mountCostSp: 1 },
-            "cavalo_carga": { name: "Cavalo de Carga", mph: { estrada: 46, sem_estrada: 36 }, mountCostSp: 1 }
+        modes: { 
+            "ape": { name: "Sem Montaria (30ft)", discordTag: "(30ft)", mph: { estrada: 32, sem_estrada: 24 }, mountCostSp: 0 },
+            "cavalo_carga": { name: "Montaria (40ft)", discordTag: "(40ft)", mph: { estrada: 46, sem_estrada: 36 }, mountCostSp: 1 },
+            "cavalo_rapido": { name: "Montaria (60ft)", discordTag: "(60ft)", mph: { estrada: 64, sem_estrada: 52 }, mountCostSp: 1 }
         },
-        baseTravelerCostSp: 5,
+        baseTravelerCostSp: gameEconomy.rationCostSp,
         isCollective: false
     },
     "carroca": {
@@ -118,7 +125,7 @@ const transportRules = {
         hasConditions: true,
         conditions: { "estrada": "Por Estrada", "sem_estrada": "Sem Estrada" },
         mph: { estrada: 40, sem_estrada: 28 },
-        baseTravelerCostSp: 5, mountCostSp: 1, 
+        baseTravelerCostSp: gameEconomy.rationCostSp, mountCostSp: 1, 
         isCollective: true
     },
     "caravana": {
@@ -127,7 +134,7 @@ const transportRules = {
         hasConditions: true,
         conditions: { "estrada": "Por Estrada", "sem_estrada": "Sem Estrada" },
         mph: { estrada: 40, sem_estrada: 33 },
-        baseTravelerCostSp: 10, mountCostSp: 0, // 5 passagem + 5 ração
+        baseTravelerCostSp: 10, mountCostSp: 0, 
         allowedCities: ["Waterdeep", "Baldur's Gate", "Neverwinter", "Luskan", "Daggerford", "Silverymoon", "Triboar", "Elturel", "Iriaebor", "Scornubel", "Berdusk", "Secomber"],
         isCollective: true
     },
@@ -137,7 +144,7 @@ const transportRules = {
         hasConditions: false,
         conditions: { "normal": "Mar Aberto" },
         mph: { normal: 75 },
-        baseTravelerCostSp: 50, mountCostSp: 10, // 5gp pass + 1gp cavalo
+        baseTravelerCostSp: 50, mountCostSp: 10, 
         isCollective: true
     },
     "barco_fluvial": {
