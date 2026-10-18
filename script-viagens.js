@@ -332,13 +332,16 @@ function updateSummary() {
         <p><strong>Custo Final (Grupo):</strong> <span class="cost-highlight">${finalFormattedCost}</span></p>
     `;
 
-    discordText.textContent = `**Comitiva:** ${discordCharsLog.join(', ')}
-**Caminho:** ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}
+    // Caso a guilda decida exibir o custo total no Discord novamente no futuro,
+    // basta copiar a linha abaixo e colar de volta dentro das crases:
+    // **Custo Total (Grupo):** ${finalFormattedCost}
 
-**Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
-**Encontros:** ${encountersSelect.value}
-**Custo Total (Grupo):** ${finalFormattedCost}
-**Dias de Viagem:** ${discordCurrentDay} / ${totalDaysInGame} (${downtime} dia(s) de Downtime)`;
+    discordText.textContent = `**Comitiva:** ${discordCharsLog.join(', ')}
+    **Caminho:** ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}
+
+    **Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
+    **Encontros:** ${encountersSelect.value}
+    **Dias de Viagem:** ${discordCurrentDay} / ${totalDaysInGame} (${downtime} dia(s) de Downtime)`;
 
     summaryBox.classList.remove('hidden');
 }
