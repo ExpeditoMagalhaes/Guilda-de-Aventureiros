@@ -373,7 +373,16 @@ function updateMapTransform() {
     if(mapImage) mapImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${mapScale})`;
 }
 
+// Variáveis e Função para o Pinch-to-Zoom (Toque duplo)
+let initialPinchDistance = null;
+let lastScale = 1;
+
+function getDistance(touches) {
+    return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+}
+
 if(mapContainer) {
+    // --- Mouse Events mantidos iguais aqui ---
     mapContainer.addEventListener('wheel', (e) => {
         e.preventDefault(); 
         const zoomSpeed = 0.1;
@@ -409,21 +418,49 @@ if(mapContainer) {
     mapContainer.addEventListener('mouseup', () => isPanning = false);
     mapContainer.addEventListener('mouseleave', () => isPanning = false);
 
+    // --- Touch Events (Mobile) Atualizados ---
     mapContainer.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
             isPanning = true;
             startX = e.touches[0].clientX - translateX;
             startY = e.touches[0].clientY - translateY;
+        } else if (e.touches.length === 2) {
+            isPanning = false;
+            initialPinchDistance = getDistance(e.touches);
+            lastScale = mapScale;
         }
     });
+
     mapContainer.addEventListener('touchmove', (e) => {
-        if (!isPanning || e.touches.length !== 1) return;
         e.preventDefault();
-        translateX = e.touches[0].clientX - startX;
-        translateY = e.touches[0].clientY - startY;
-        updateMapTransform();
+        if (isPanning && e.touches.length === 1) {
+            translateX = e.touches[0].clientX - startX;
+            translateY = e.touches[0].clientY - startY;
+            updateMapTransform();
+        } else if (e.touches.length === 2 && initialPinchDistance) {
+            const currentDistance = getDistance(e.touches);
+            const scaleChange = currentDistance / initialPinchDistance;
+            let newScale = lastScale * scaleChange;
+            
+            // Trava o limite do zoom entre 0.1x e 5x
+            mapScale = Math.min(Math.max(0.1, newScale), 5);
+            updateMapTransform();
+        }
     }, { passive: false });
-    mapContainer.addEventListener('touchend', () => isPanning = false);
+
+    mapContainer.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+            initialPinchDistance = null;
+        }
+        if (e.touches.length === 1) {
+            // Se soltar um dedo e ficar apenas um, retoma o cálculo de arrasto
+            startX = e.touches[0].clientX - translateX;
+            startY = e.touches[0].clientY - translateY;
+            isPanning = true;
+        } else {
+            isPanning = false;
+        }
+    });
 }
 
 // INICIALIZAÇÃO
