@@ -337,7 +337,7 @@ function updateSummary() {
     // **Custo Total (Grupo):** ${finalFormattedCost}
 
     discordText.textContent = `**Comitiva:** ${discordCharsLog.join(', ')}
-    **Caminho:** ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}
+**Caminho:** ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}
 
 **Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
 **Encontros:** ${encountersSelect.value}
