@@ -1,213 +1,366 @@
-const distanceMatrix = {
-    "Amnwater": { "Crimmor": 98, "Keczulla": 93, "Minsor Vale": 72 },
-    "Amphail": { "Rassalantar": 28, "Red Larch": 83 },
-    "Aris": { "Hluthvar": 152 },
-    "Asbravn": { "Hluthvar": 93, "Iriaebor": 55 },
-    "Ascore": { "Auvandell": 252, "Citadel Adbar": 117, "Citadel Felbarr": 265, "Deadsnows": 143, "Newfort": 189, "Sundabar": 230 },
-    "Athkatla": { "Crimmor": 73 },
-    "Auvandell": { "Ascore": 252, "Citadel Adbar": 218, "Citadel Felbarr": 96, "Deadsnows": 143, "Newfort": 81, "Hawk's Nest": 47, "Sundabar": 46 },
-    "Baldur's Gate": { "Boareskyr Bridge": 301, "Elturel": 267, "Friendly Arm Inn": 77, "Soubar": 287, "Way Inn": 376 },
-    "Bargewright Inn": { "Red Larch": 66, "Womford": 14 },
-    "Beliard": { "Calling Horns": 156, "Westbridge": 71, "Womford": 98 },
-    "Berdusk": { "Elturel": 196, "Fendarl's Gate": 108, "Greenest": 192, "Scornubel": 105 },
-    "Beregost": { "Candlekeep": 55, "Nashkel": 147, "Friendly Arm Inn": 91 },
-    "Boareskyr Bridge": { "Baldur's Gate": 302, "Elturel": 187, "Soubar": 40, "Way Inn": 315 },
-    "Brost": { "Gambiton": 110, "Trademeet": 125, "Trailstone": 158 },
-    "Bryn Shander": { "Hundelstone": 54 },
-    "Calling Horns": { "Beliard": 156, "Everlund": 144, "Noanar's Hold": 46, "Olostin's Hold": 110, "Yartar": 95 },
-    "Candlekeep": { "Friendly Arm Inn": 103, "Beregost": 55 },
-    "Citadel Adbar": { "Ascore": 117, "Auvandell": 218, "Citadel Felbarr": 232, "Deadsnows": 109, "Newfort": 155, "Sundabar": 197 },
-    "Citadel Felbarr": { "Ascore": 265, "Auvandell": 96, "Citadel Adbar": 232, "Deadsnows": 157, "Newfort": 95, "Sundabar": 75 },
-    "Corm Orp": { "Hill's Edge": 41, "Hluthvar": 62 },
-    "Crimmor": { "Amnwater": 98, "Athkatla": 73, "Minsor Vale": 41, "Nashkel": 69, "Purskul": 13 },
-    "Daggerford": { "Way Inn": 80, "Waterdeep": 113 },
-    "Deadsnows": { "Ascore": 143, "Auvandell": 143, "Citadel Adbar": 109, "Citadel Felbarr": 157, "Newfort": 82, "Sundabar": 121 },
-    "Easting": { "Iriaebor": 52 },
-    "Elturel": { "Baldur's Gate": 267, "Berdusk": 196, "Boareskyr Bridge": 186, "Fendarl's Gate": 276, "Greenest": 359, "Scornubel": 121, "Soubar": 171, "Triel": 71, "Way Inn": 681 },
-    "Esford": { "Gambiton": 58, "Imnescar": 104 },
-    "Eshpurta": { "Iriaebor": 210, "Keczulla": 114, "Trollford": 38 },
-    "Esmeltaran": { "Gambiton": 35, "Keczulla": 69 },
-    "Everlund": { "Calling Horns": 144, "Jalanthar": 89, "Noanar's Hold": 147, "Olostin's Hold": 54, "Silverymoon": 44 },
-    "Fendarl's Gate": { "Berdusk": 108, "Elturel": 276, "Iriaebor": 33, "Greenest": 255, "Scornubel": 185 },
-    "Fireshear": { "Hundelstone": 55, "Ironmaster": 74, "Luskan": 160 },
-    "Friendly Arm Inn": { "Baldur's Gate": 77, "Beregost": 91, "Candlekeep": 103 },
-    "Gambiton": { "Brost": 110, "Esford": 58, "Esmeltaran": 35, "Imnescar": 137 },
-    "Goldenfields": { "Waterdeep": 82 },
-    "Greenest": { "Berdusk": 192, "Elturel": 359, "Fendarl's Gate": 255, "Nashkel": 203, "Scornubel": 268 },
-    "Hardbuckler": { "Hill's Edge": 70, "Triel": 100 },
-    "Hawk's Nest": { "Auvandell": 47, "Khelb": 38 },
-    "Hill's Edge": { "Corm Orp": 41, "Hardbuckler": 70 },
-    "Hillfort Keshla": { "Riatavin": 170, "Toralth": 168, "Trailstone": 126, "Trollford": 64 },
-    "Hluthvar": { "Aris": 152, "Asbravn": 93, "Corm Orp": 62, "Scornubel": 121 },
-    "Hundelstone": { "Bryn Shander": 54, "Fireshear": 55, "Ironmaster": 72, "Luskan": 140 },
-    "Imnescar": { "Esford": 104, "Gambiton": 137, "Purskul": 68, "Trademeet": 69 },
-    "Iriaebor": { "Asbravn": 55, "Easting": 52, "Eshpurta": 210, "Fendarl's Gate": 33 },
-    "Ironmaster": { "Fireshear": 74, "Hundelstone": 72, "Luskan": 179 },
-    "Jalanthar": { "Everlund": 89 },
-    "Julkoun": { "Secomber": 59 },
-    "Keczulla": { "Amnwater": 93, "Eshpurta": 114, "Esmeltaran": 69 },
-    "Khelb": { "Hawk's Nest": 38, "Silverymoon": 22 },
-    "Kheldell": { "Red Larch": 52 },
-    "Leilon": { "Neverwinter": 134, "Phandalin": 103, "Thornhold": 114, "Triboar": 223 },
-    "Longsaddle": { "Triboar": 96, "Xantharls Keep": 97 },
-    "Loudwater": { "Parnast": 246, "Secomber": 155 },
-    "Luskan": { "Fireshear": 160, "Hundelstone": 140, "Ironmaster": 179, "Mirabar": 150, "Neverwinter": 133 },
-    "Minsor Vale": { "Amnwater": 72, "Crimmor": 41 },
-    "Mirabar": { "Luskan": 150, "Xantharls Keep": 70 },
-    "Mornbryn's Shield": { "Yartar": 90 },
-    "Mosstone": { "Trademeet": 131 },
-    "Murann": { "Trademeet": 85 },
-    "Nashkel": { "Beregost": 147, "Crimmor": 69, "Greenest": 203 },
-    "Neverwinter": { "Leilon": 134, "Luskan": 133, "Phandalin": 146, "Triboar": 265 },
-    "Newfort": { "Ascore": 189, "Auvandell": 81, "Citadel Adbar": 155, "Citadel Felbarr": 95, "Deadsnows": 82, "Sundabar": 60 },
-    "Noanar's Hold": { "Calling Horns": 46, "Everlund": 147, "Olostin's Hold": 112 },
-    "Olostin's Hold": { "Calling Horns": 110, "Everlund": 54, "Noanar's Hold": 112 },
-    "Parnast": { "Loudwater": 246 },
-    "Phandalin": { "Leilon": 103, "Neverwinter": 146, "Triboar": 173 },
-    "Purskul": { "Crimmor": 13, "Imnescar": 68 },
-    "Rassalantar": { "Amphail": 28, "Thornhold": 155, "Waterdeep": 42 },
-    "Red Larch": { "Amphail": 83, "Bargewright Inn": 66, "Kheldell": 52, "Westbridge": 71 },
-    "Riatavin": { "Hillfort Keshla": 170, "Toralth": 153, "Trailstone": 109 },
-    "Scornubel": { "Berdusk": 105, "Elturel": 121, "Fendarl's Gate": 185, "Greenest": 269, "Hluthvar": 121, "Triel": 59 },
-    "Secomber": { "Julkoun": 59, "Loudwater": 155, "Uluvin": 66 },
-    "Silverymoon": { "Everlund": 44, "Khelb": 22 },
-    "Soubar": { "Baldur's Gate": 287, "Boareskyr Bridge": 39, "Elturel": 186, "Triel": 59 },
-    "Sundabar": { "Ascore": 230, "Auvandell": 46, "Citadel Adbar": 197, "Citadel Felbarr": 75, "Deadsnows": 121, "Newfort": 60 },
-    "Thornhold": { "Leilon": 114, "Rassalantar": 155, "Waterdeep": 145 },
-    "Toralth": { "Hillfort Keshla": 168, "Riatavin": 153, "Trailstone": 59 },
-    "Trademeet": { "Brost": 125, "Imnescar": 69, "Mosstone": 131, "Murann": 85 },
-    "Trailstone": { "Brost": 158, "Hillfort Keshla": 126, "Toralth": 59, "Riatavin": 109 },
-    "Triboar": { "Leilon": 223, "Longsaddle": 96, "Neverwinter": 265, "Phandalin": 173, "Westbridge": 67, "Yartar": 59 },
-    "Triel": { "Elturel": 71, "Hardbuckler": 100, "Scornubel": 59, "Soubar": 138 },
-    "Trollford": { "Eshpurta": 38, "Hillfort Keshla": 64 },
-    "Uluvin": { "Secomber": 66, "Womford": 133 },
-    "Waterdeep": { "Daggerford": 113, "Goldenfields": 82, "Rassalantar": 42, "Thornhold": 145 },
-    "Way Inn": { "Baldur's Gate": 376, "Boareskyr Bridge": 314, "Daggerford": 80 },
-    "Westbridge": { "Beliard": 71, "Red Larch": 71, "Triboar": 67 },
-    "Womford": { "Beliard": 98, "Bargewright Inn": 14, "Uluvin": 133 },
-    "Xantharls Keep": { "Longsaddle": 97, "Mirabar": 70 },
-    "Yartar": { "Calling Horns": 95, "Mornbryn's Shield": 90, "Triboar": 59 }
-};
-
+// =========================================================
+// VARIÁVEIS DE ESTADO E ELEMENTOS DOM (Formulário e Rota)
+// =========================================================
+let routePath = []; 
 const container = document.getElementById('steps-container');
+const charactersContainer = document.getElementById('characters-container');
+const transportSelect = document.getElementById('transportMode');
+const travelersCountInput = document.getElementById('travelersCount');
 const summaryBox = document.getElementById('summary-box');
-let routePath = []; // Armazena as cidades selecionadas na ordem
+const summaryContent = document.getElementById('summary-content');
+const discordText = document.getElementById('discordText');
+const copyBtn = document.getElementById('copyBtn');
 
-// Função principal que gera um novo <select>
+// =========================================================
+// VARIÁVEIS E ELEMENTOS DOM (Mapa Interativo)
+// =========================================================
+const mapModal = document.getElementById('mapModal');
+const openMapBtn = document.getElementById('openMapBtn');
+const closeMapBtn = document.getElementById('closeMapBtn');
+const mapContainer = document.getElementById('mapContainer');
+const mapImage = document.getElementById('mapImage');
+
+let mapScale = 1;
+let isPanning = false;
+let startX = 0, startY = 0;
+let translateX = 0, translateY = 0;
+
+// =========================================================
+// OUVINTES DE EVENTOS PRINCIPAIS
+// =========================================================
+transportSelect.addEventListener('change', () => { renderCharacters(); resetBuilder(); });
+travelersCountInput.addEventListener('input', renderCharacters);
+copyBtn.addEventListener('click', copyToClipboard);
+
+// --- 1. RENDERIZAÇÃO DOS PERSONAGENS ---
+function renderCharacters() {
+    const count = Math.max(1, parseInt(travelersCountInput.value) || 1);
+    const globalRule = transportRules[transportSelect.value];
+    charactersContainer.innerHTML = '';
+
+    for (let i = 0; i < count; i++) {
+        const card = document.createElement('div');
+        card.className = 'char-card';
+        
+        let mountOptionsHtml = '';
+        if (globalRule.isCollective) {
+            const forbid = globalRule.forbidMounts ? 'disabled' : '';
+            mountOptionsHtml = `
+                <select class="char-mount" ${forbid}>
+                    <option value="none">Sem montaria</option>
+                    ${!globalRule.forbidMounts ? '<option value="has_mount">Levando Montaria</option>' : ''}
+                </select>
+            `;
+        } else {
+            mountOptionsHtml = `
+                <select class="char-mount">
+                    <option value="ape">A Pé (30 ft)</option>
+                    <option value="cavalo_carga">Cavalo de Carga (40 ft)</option>
+                    <option value="cavalo_rapido">Cavalo Rápido (60 ft)</option>
+                </select>
+            `;
+        }
+
+        card.innerHTML = `
+            <span class="char-card-title">Membro ${i + 1}</span>
+            <div class="char-grid">
+                <div class="input-group">
+                    <label>Nome:</label>
+                    <input type="text" class="char-name" placeholder="Ex: @Guerreiro" value="Personagem ${i + 1}">
+                </div>
+                <div class="input-group">
+                    <label>Transporte/Montaria:</label>
+                    ${mountOptionsHtml}
+                </div>
+                <div style="grid-column: span 2; margin-top: 5px;">
+                    <span style="font-size: 13px; font-weight: bold; color: var(--highlight); margin-bottom: 5px; display: block;">Provisões da Viagem:</span>
+                    <div style="display: flex; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px;">
+                            <input type="radio" name="prov_${i}" class="char-provision" value="comprada" checked style="accent-color: var(--highlight); transform: scale(1.2);"> Compradas
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 14px;">
+                            <input type="radio" name="prov_${i}" class="char-provision" value="magia" style="accent-color: var(--highlight); transform: scale(1.2);"> Magia
+                        </label>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        card.querySelectorAll('input, select').forEach(el => el.addEventListener('change', updateSummary));
+        charactersContainer.appendChild(card);
+    }
+    updateSummary();
+}
+
+// --- 2. CONSTRUTOR DE ROTAS ---
+function resetBuilder() {
+    routePath = [];
+    container.innerHTML = '';
+    summaryBox.classList.add('hidden');
+    renderStep(0);
+}
+
 function renderStep(stepIndex) {
     const wrapper = document.createElement('div');
     wrapper.className = 'step-wrapper';
     wrapper.dataset.index = stepIndex;
 
-    // Se não for o primeiro passo, adiciona uma seta apontando para baixo
     if (stepIndex > 0) {
         const arrow = document.createElement('div');
         arrow.className = 'step-arrow';
-        arrow.innerHTML = '&#8595;'; // Seta para baixo
+        arrow.innerHTML = '&#8595;';
         wrapper.appendChild(arrow);
     }
 
-    const select = document.createElement('select');
-    
-    // Opção padrão vazia
-    const defaultOption = document.createElement('option');
-    defaultOption.value = "";
-    defaultOption.textContent = stepIndex === 0 ? "Escolha a Cidade de Origem..." : `Próxima parada...`;
-    select.appendChild(defaultOption);
+    const row = document.createElement('div');
+    row.className = 'step-row';
 
+    const citySelect = document.createElement('select');
+    citySelect.appendChild(new Option(stepIndex === 0 ? "Origem..." : "Destino...", ""));
+
+    const activeRules = transportRules[transportSelect.value];
+    const currentMatrix = activeRules.matrix;
     let availableCities = [];
 
     if (stepIndex === 0) {
-        // No primeiro passo, mostra TODAS as cidades disponíveis
-        availableCities = Object.keys(distanceMatrix).sort();
+        availableCities = Object.keys(currentMatrix);
     } else {
-        // Nos próximos passos, mostra apenas os destinos conectados à cidade anterior
-        const originCity = routePath[stepIndex - 1];
-        
-        // Descobre a cidade de onde viemos antes dessa (para não voltar)
-        const cityToExclude = stepIndex >= 2 ? routePath[stepIndex - 2] : null;
-
-        // Filtra as conexões disponíveis, removendo a cidade que acabamos de visitar
-        availableCities = Object.keys(distanceMatrix[originCity])
-            .filter(city => city !== cityToExclude)
-            .sort();
+        const originCity = routePath[stepIndex - 1].city;
+        const cityToExclude = stepIndex >= 2 ? routePath[stepIndex - 2].city : null;
+        if (currentMatrix[originCity]) {
+            availableCities = Object.keys(currentMatrix[originCity]).filter(city => city !== cityToExclude);
+        }
     }
 
-    // Se não houver cidades disponíveis (beco sem saída), não gera o select
+    if (activeRules.allowedCities) {
+        availableCities = availableCities.filter(city => activeRules.allowedCities.includes(city));
+    }
+    availableCities.sort();
+
     if (stepIndex > 0 && availableCities.length === 0) {
-        const deadEnd = document.createElement('p');
-        deadEnd.style.color = "#8b0000";
-        deadEnd.style.fontStyle = "italic";
-        deadEnd.textContent = "Fim da estrada (Sem outras conexões).";
-        wrapper.appendChild(deadEnd);
+        row.innerHTML = `<p style="color: #8b0000; font-style: italic; margin:0;">Fim da rota. Nenhuma conexão disponível.</p>`;
+        wrapper.appendChild(row);
         container.appendChild(wrapper);
         return;
     }
 
-    // Adiciona as cidades filtradas ao select
-    availableCities.forEach(city => {
-        const option = document.createElement('option');
-        option.value = city;
-        option.textContent = city;
-        select.appendChild(option);
-    });
+    availableCities.forEach(city => citySelect.appendChild(new Option(city, city)));
+    row.appendChild(citySelect);
 
-    select.addEventListener('change', (e) => handleSelection(stepIndex, e.target.value));
+    let conditionSelect = null;
+    if (stepIndex > 0 && activeRules.hasConditions) {
+        conditionSelect = document.createElement('select');
+        for (let key in activeRules.conditions) {
+            conditionSelect.appendChild(new Option(activeRules.conditions[key], key));
+        }
+        row.appendChild(conditionSelect);
+    }
 
-    wrapper.appendChild(select);
+    const handleChange = () => {
+        const city = citySelect.value;
+        const cond = conditionSelect ? conditionSelect.value : (activeRules.hasConditions ? Object.keys(activeRules.conditions)[0] : "normal");
+        
+        routePath = routePath.slice(0, stepIndex);
+        container.querySelectorAll('.step-wrapper').forEach(w => {
+            if (parseInt(w.dataset.index) > stepIndex) w.remove();
+        });
+
+        if (city !== "") {
+            routePath[stepIndex] = { city: city, condition: cond };
+            renderStep(stepIndex + 1);
+        }
+        updateSummary();
+    };
+
+    citySelect.addEventListener('change', handleChange);
+    if (conditionSelect) conditionSelect.addEventListener('change', handleChange);
+
+    wrapper.appendChild(row);
     container.appendChild(wrapper);
 }
 
-// Lida com a escolha do usuário
-function handleSelection(stepIndex, selectedCity) {
-    // 1. Corta o array da rota se o usuário alterar um passo anterior
-    routePath = routePath.slice(0, stepIndex);
-
-    // 2. Remove visualmente todos os selects que vieram depois deste passo
-    const wrappers = container.querySelectorAll('.step-wrapper');
-    wrappers.forEach(wrapper => {
-        if (parseInt(wrapper.dataset.index) > stepIndex) {
-            wrapper.remove();
-        }
-    });
-
-    // 3. Se uma cidade válida foi selecionada, adiciona à rota e gera o próximo passo
-    if (selectedCity !== "") {
-        routePath[stepIndex] = selectedCity;
-        renderStep(stepIndex + 1);
-    }
-
-    // 4. Atualiza o quadro de resumo
-    updateSummary();
+// --- 3. MATEMÁTICA E RESUMO ---
+function formatCurrency(totalSp) {
+    const gp = Math.floor(totalSp / 10);
+    const sp = totalSp % 10;
+    let res = [];
+    if (gp > 0) res.push(`${gp} PO`);
+    if (sp > 0) res.push(`${sp} PP`);
+    return res.length === 0 ? "0 (Viagem 100% Mágica)" : res.join(' e ');
 }
 
-// Atualiza o quadro de cálculos finais
 function updateSummary() {
     if (routePath.length < 2) {
         summaryBox.classList.add('hidden');
         return;
     }
 
-    let totalMiles = 0;
+    const globalRule = transportRules[transportSelect.value];
+    const cards = Array.from(charactersContainer.querySelectorAll('.char-card'));
     
-    // Soma as distâncias entre cada nó do array
+    let totalFractionalDays = 0;
+    let totalMiles = 0;
+    let pathLog = [];
+
     for (let i = 0; i < routePath.length - 1; i++) {
-        const from = routePath[i];
-        const to = routePath[i + 1];
-        totalMiles += distanceMatrix[from][to];
+        const from = routePath[i].city;
+        const to = routePath[i + 1].city;
+        const condition = routePath[i + 1].condition; 
+        const dist = globalRule.matrix[from][to];
+        
+        let stepPace = 999; 
+
+        if (globalRule.isCollective) {
+            stepPace = globalRule.mph[condition];
+        } else {
+            cards.forEach(card => {
+                const charMount = card.querySelector('.char-mount').value;
+                const charPace = globalRule.modes[charMount].mph[condition];
+                if (charPace < stepPace) stepPace = charPace;
+            });
+        }
+
+        totalFractionalDays += (dist / stepPace);
+        totalMiles += dist;
+        pathLog.push(`${to} (${globalRule.conditions[condition] || "Mar Aberto"})`);
     }
 
-    // Ritmo de viagem do D&D 5e: 24 milhas por dia
-    const totalDays = Math.ceil(totalMiles / 24);
+    const totalDaysRounded = Math.ceil(totalFractionalDays);
 
-    summaryBox.innerHTML = `
-        <p><strong>Caminho:</strong> <span class="route-path">${routePath.join(' ➔ ')}</span></p>
+    let dailyGroupCostSp = 0;
+    let discordCharsLog = [];
+
+    cards.forEach(card => {
+        const name = card.querySelector('.char-name').value || "Desconhecido";
+        const mountInput = card.querySelector('.char-mount').value;
+        const provInput = card.querySelector('.char-provision:checked').value;
+
+        let charDailySp = 0;
+        let provText = provInput === 'magia' ? "(Magia)" : "(Pago)";
+        let mountText = "";
+
+        if (globalRule.isCollective) {
+            charDailySp += globalRule.baseTravelerCostSp; 
+            if (provInput === 'magia') charDailySp = Math.max(0, charDailySp - 5);
+            
+            if (mountInput === 'has_mount') {
+                charDailySp += globalRule.mountCostSp;
+                mountText = " c/ Montaria Extra";
+            }
+        } else {
+            charDailySp += globalRule.baseTravelerCostSp; 
+            if (provInput === 'magia') charDailySp = Math.max(0, charDailySp - 5);
+            
+            charDailySp += globalRule.modes[mountInput].mountCostSp; 
+            mountText = ` [${globalRule.modes[mountInput].name}]`;
+        }
+
+        dailyGroupCostSp += charDailySp;
+        discordCharsLog.push(`${name}${mountText} ${provText}`);
+    });
+
+    const finalTotalCostSp = dailyGroupCostSp * totalDaysRounded;
+    const finalFormattedCost = formatCurrency(finalTotalCostSp);
+
+    summaryContent.innerHTML = `
+        <p><strong>Caminho:</strong> ${routePath[0].city} ➔ ${pathLog.join(' ➔ ')}</p>
         <p><strong>Distância Total:</strong> ${totalMiles} milhas</p>
-        <p><strong>Tempo Estimado:</strong> ${totalDays} dia(s) de viagem</p>
+        <p><strong>Dias de Viagem:</strong> ${totalDaysRounded} dia(s)</p>
+        <p><strong>Custo Total do Grupo:</strong> <span class="cost-highlight">${finalFormattedCost}</span></p>
     `;
-    
+
+    discordText.textContent = `**Comitiva:** ${discordCharsLog.join(', ')}
+**Partida:** ${routePath[0].city}
+**Destino:** ${routePath[routePath.length - 1].city}
+
+**Transporte Global:** ${transportSelect.options[transportSelect.selectedIndex].text}
+**Trajeto(s):** ${pathLog.join(', ')}
+**Custo Total (Grupo):** ${finalFormattedCost}
+**Dias de Viagem:** 0 / ${totalDaysRounded}`;
+
     summaryBox.classList.remove('hidden');
 }
 
-// Inicializa a aplicação criando o primeiro Select de Origem
-renderStep(0);
+function copyToClipboard() {
+    navigator.clipboard.writeText(discordText.textContent).then(() => {
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = "✅ Copiado!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => { copyBtn.innerHTML = originalText; copyBtn.classList.remove("copied"); }, 2000);
+    });
+}
+
+// --- 4. SISTEMA DE MAPA INTERATIVO (PAN & ZOOM) ---
+
+// Abre o Modal e centraliza a imagem
+if(openMapBtn) {
+    openMapBtn.addEventListener('click', () => {
+        mapModal.classList.remove('hidden');
+        mapScale = 0.5; // Começa menor para caber na tela
+        translateX = 0; 
+        translateY = 0;
+        updateMapTransform();
+    });
+}
+
+// Fecha o Modal
+if(closeMapBtn) {
+    closeMapBtn.addEventListener('click', () => {
+        mapModal.classList.add('hidden');
+    });
+}
+
+// Aplica a matemática visual no CSS da imagem
+function updateMapTransform() {
+    if(mapImage) {
+        mapImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${mapScale})`;
+    }
+}
+
+// Zoom com o Scroll do Mouse
+if(mapContainer) {
+    mapContainer.addEventListener('wheel', (e) => {
+        e.preventDefault(); 
+        const zoomSpeed = 0.1;
+        const direction = e.deltaY < 0 ? 1 : -1; 
+        
+        const rect = mapContainer.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        let newScale = mapScale + (direction * zoomSpeed);
+        newScale = Math.min(Math.max(0.1, newScale), 5); // Limites de zoom
+
+        const ratio = 1 - (newScale / mapScale);
+        translateX += (mouseX - translateX) * ratio;
+        translateY += (mouseY - translateY) * ratio;
+
+        mapScale = newScale;
+        updateMapTransform();
+    });
+
+    // Mover a imagem com o Clique (Pan)
+    mapContainer.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isPanning = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+    });
+
+    mapContainer.addEventListener('mousemove', (e) => {
+        if (!isPanning) return;
+        e.preventDefault();
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateMapTransform();
+    });
+
+    mapContainer.addEventListener('mouseup', () => isPanning = false);
+    mapContainer.addEventListener('mouseleave', () => isPanning = false);
+}
+
+// =========================================================
+// INICIALIZAÇÃO DA PÁGINA
+// =========================================================
+renderCharacters();
+resetBuilder();

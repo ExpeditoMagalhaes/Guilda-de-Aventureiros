@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logística de Faerûn - D&D</title>
+    <link rel="stylesheet" href="style-viagens.css">
+</head>
+<body>
+    <div class="container">
+        
+        <header>
+            <h1>Logística de Expedição</h1>
+            <p class="subtitle">Planeje rotas, terreno e calcule os custos de cada membro</p>
+        </header>
+
+        <button id="openMapBtn" class="map-btn">🗺️ Visualizar Mapa de Faerûn</button>
+
+        <!-- Configuração Global -->
+        <div class="control-panel">
+            <div class="input-group">
+                <label for="transportMode">Transporte do Grupo:</label>
+                <select id="transportMode">
+                    <option value="individual">Deslocamento Individual</option>
+                    <option value="carroca">Carroça (Transporte Coletivo)</option>
+                    <option value="caravana">Caravana Mercantil</option>
+                    <option value="veleiro">Navio Veleiro (Costa)</option>
+                    <option value="barco_fluvial">Barco Fluvial (Rios)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="travelersCount">Número de Viajantes:</label>
+                <input type="number" id="travelersCount" value="1" min="1" max="10">
+            </div>
+        </div>
+
+        <!-- Área dos Personagens -->
+        <div id="characters-container"></div>
+
+        <hr class="divider">
+        <h3 class="section-title">Mapa e Rota</h3>
+
+        <!-- Construtor de Rota -->
+        <div id="route-builder">
+            <div id="steps-container"></div>
+        </div>
+
+        <!-- Área de Resumo e Discord -->
+        <div id="summary-box" class="summary-box hidden">
+            <div id="summary-content"></div>
+            
+            <hr class="divider">
+            <h3 class="discord-title">Log para o Discord:</h3>
+            <div class="discord-box">
+                <pre id="discordText"></pre>
+                <button id="copyBtn">📋 Copiar Texto</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal do Mapa Interativo -->
+    <div id="mapModal" class="map-modal hidden">
+        <div class="map-modal-content">
+            <button id="closeMapBtn" class="close-map-btn">❌ Fechar Mapa</button>
+            <p class="map-instructions">Use o <strong>Scroll do Mouse</strong> para dar zoom e <strong>Clique e Arraste</strong> para mover.</p>
+            <div id="mapContainer" class="map-container">
+                <img id="mapImage" src="img/mapa.jpg" alt="Mapa da Costa da Espada">
+            </div>
+        </div>
+    </div>
+
+    <script src="dados.js"></script>
+    <script src="script-viagens.js"></script>
+</body>
+</html>
